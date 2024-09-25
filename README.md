@@ -1,85 +1,131 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+# URL Shortener Service
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+This is a scalable URL shortener service built using **NestJS**, **MongoDB**, and **Redis**. The application allows users to shorten long URLs and provides redirection to the original URLs while tracking the number of times each shortened URL is accessed.
 
-## Project setup
+## Features
+
+- Shorten long URLs to custom short URLs.
+- Redirection from short URLs to the original URLs.
+- Count the number of times each short URL is accessed.
+- Caching frequently accessed URLs using Redis for better performance.
+- Optional URL expiration feature.
+- Modular and scalable architecture using NestJS principles and SOLID design patterns.
+
+## Technologies Used
+
+- **NestJS**: Framework for building efficient, reliable, and scalable server-side applications.
+- **MongoDB**: NoSQL database for storing URLs and associated metadata.
+- **Redis**: In-memory database used for caching frequently accessed URLs.
+- **TypeScript**: Static typing to improve code quality and maintainability.
+- **Docker**: Containerization for development and deployment.
+- **Jest**: Unit and integration tests to ensure code quality.
+- **Swagger**: API documentation for easy testing and visualization.
+
+## Requirements
+
+- **Node.js**: v18.x or higher
+- **npm**: v8.x or higher
+- **MongoDB**: Local or cloud instance
+- **Redis**: Local instance or Redis Cloud/Upstash (free tiers available)
+
+## Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/yourusername/url-shortener.git
+   cd url-shortener
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Environment Variables:**
+
+   Create a `.env` file in the root directory and configure the following variables:
+
+   ```bash
+   # Application Port
+   PORT=3000
+
+   # MongoDB Configuration
+   MONGO_URI=mongodb://localhost:27017/url-shortener
+
+   # Redis Configuration (Localhost or Redis Cloud)
+   REDIS_HOST=localhost
+   REDIS_PORT=6379
+   REDIS_PASSWORD=
+   ```
+
+4. **Running MongoDB and Redis Locally (optional):**
+
+   If you don’t have MongoDB or Redis running locally, you can use Docker:
+
+   ```bash
+   # Run MongoDB
+   docker run --name mongo -p 27017:27017 -d mongo
+
+   # Run Redis
+   docker run --name redis -p 6379:6379 -d redis
+   ```
+
+## Running the Application
+
+1. **Development Mode:**
+
+   ```bash
+   npm run start:dev
+   ```
+
+2. **Production Mode:**
+
+   ```bash
+   npm run build
+   npm run start:prod
+   ```
+
+3. **Access the API:**
+   - The server will be running at `http://localhost:3000`.
+   - Swagger API documentation will be available at `http://localhost:3000/api`.
+
+## Testing
+
+You can run the test suite using the following command:
 
 ```bash
-$ npm install
+npm run test
 ```
 
-## Compile and run the project
+For end-to-end testing:
 
 ```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+npm run test:e2e
 ```
 
-## Run tests
+## API Endpoints
+
+- **POST /url**: Shorten a long URL.
+- **GET /:shortUrl**: Redirects to the original URL using the shortened URL.
+- **GET /url/stats/:shortUrl**: Get statistics about a shortened URL (clicks, creation date, etc.).
+
+## Docker
+
+To run the entire application with **Docker Compose**, use the following command:
 
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+docker-compose up
 ```
 
-## Resources
+This will spin up MongoDB, Redis, and the NestJS service together.
 
-Check out a few resources that may come in handy when working with NestJS:
+## Future Enhancements
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+- User authentication and authorization for managing URLs.
+- Custom short URLs.
+- Analytics dashboard for URL statistics.
+- Expiration dates for short URLs.
