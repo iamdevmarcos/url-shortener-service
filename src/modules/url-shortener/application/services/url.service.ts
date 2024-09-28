@@ -1,17 +1,21 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CacheService } from '../../infrastructure/cache/cache.service';
 import { Url } from '../../infrastructure/database/url.schema';
-import { nanoid } from 'nanoid';
-import { UrlRepositoryInterface } from '../../domain/repositories/url.repository.interface';
+import {
+  URL_REPOSITORY,
+  UrlRepositoryInterface,
+} from '../../domain/repositories/url.repository.interface';
 
 @Injectable()
 export class UrlService {
   constructor(
+    @Inject(URL_REPOSITORY)
     private readonly urlRepository: UrlRepositoryInterface,
     private readonly cacheService: CacheService,
   ) {}
 
   async shortenUrl(originalUrl: string): Promise<Url> {
+    const { nanoid } = await import('nanoid');
     const shortUrl = nanoid(6);
     const newUrl = this.urlRepository.createUrl(originalUrl, shortUrl);
 
