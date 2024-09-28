@@ -5,6 +5,7 @@ import { CacheService } from './infrastructure/cache/cache.service';
 import { UrlController } from './application/controllers/url.controller';
 import { UrlService } from './application/services/url.service';
 import { UrlRepository } from './domain/repositories/url.repository';
+import { URL_REPOSITORY } from './domain/repositories/url.repository.interface';
 
 const features = [{ name: Url.name, schema: UrlSchema }];
 
@@ -14,7 +15,8 @@ const features = [{ name: Url.name, schema: UrlSchema }];
   providers: [
     UrlService,
     CacheService,
-    { provide: UrlRepository, useClass: UrlRepository },
+    { provide: URL_REPOSITORY, useClass: UrlRepository },
   ],
+  exports: [UrlService],
 })
 export class UrlShortenerModule {}
