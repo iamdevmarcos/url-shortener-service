@@ -16,6 +16,7 @@ services:
       - PORT=8080
     volumes:
       - .:/app
+    command: npm run start:dev 
     networks:
       - app-network
 
@@ -41,4 +42,4 @@ volumes:
   mongo-data:
 
 networks:
-  app-network:
+  app-network:  
