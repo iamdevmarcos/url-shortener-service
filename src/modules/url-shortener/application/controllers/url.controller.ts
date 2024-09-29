@@ -5,9 +5,7 @@ import {
   NotFoundException,
   Param,
   Post,
-  Res,
 } from '@nestjs/common';
-import { Response } from 'express';
 import { UrlService } from '../services/url.service';
 import {
   ApiOperation,
@@ -35,30 +33,26 @@ export class UrlController {
   @ApiResponse({ status: 400, description: 'Invalid URL provided.' })
   async shortenUrl(@Body() createUrlDto: CreateUrlDTO) {
     const url = await this.urlService.shortenUrl(createUrlDto.originalUrl);
-    return { shortUrl: url.shortUrl };
+    return { shortUrl: url.shortUrl, createdAt: url.createdAt };
   }
 
   @Get('/:shortUrl')
   @ApiOperation({
-    summary: 'Redirect to the original URL using the shortened URL',
+    summary: 'Get a originalUrl by a shortUrl provided.',
   })
   @ApiParam({ name: 'shortUrl', description: 'The shortened URL' })
-  @ApiResponse({
-    status: 302,
-    description: 'Redirects to the original URL.',
-  })
   @ApiResponse({
     status: 404,
     description: 'Shortened URL not found.',
   })
-  async redirect(@Param('shortUrl') shortUrl: string, @Res() res: Response) {
+  async getOriginalUrl(@Param('shortUrl') shortUrl: string) {
     const url = await this.urlService.findUrlByShortCode(shortUrl);
     if (!url) {
       throw new NotFoundException('URL not found');
     }
 
     await this.urlService.incrementUrlClicks(shortUrl);
-    return res.redirect(url.originalUrl);
+    return { originalUrl: url.originalUrl, createdAt: url.createdAt };
   }
 
   @Get('/stats/:shortUrl')
