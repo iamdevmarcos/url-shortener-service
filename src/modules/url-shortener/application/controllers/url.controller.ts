@@ -16,12 +16,14 @@ import {
 } from '@nestjs/swagger';
 import { CreateUrlDTO } from '../dto/create-url.dto';
 import { UrlResponseDTO } from '../dto/url-response.dto';
+import { Throttle } from '@nestjs/throttler';
 
 @ApiTags('urls')
 @Controller('url')
 export class UrlController {
   constructor(private readonly urlService: UrlService) {}
 
+  @Throttle({ default: { limit: 10, ttl: 60 } })
   @Post()
   @ApiOperation({ summary: 'Shorten a long URL' })
   @ApiBody({ type: CreateUrlDTO })
@@ -36,6 +38,7 @@ export class UrlController {
     return { shortUrl: url.shortUrl, createdAt: url.createdAt };
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60 } })
   @Get('/:shortUrl')
   @ApiOperation({
     summary: 'Get a originalUrl by a shortUrl provided.',
@@ -55,6 +58,7 @@ export class UrlController {
     return { originalUrl: url.originalUrl, createdAt: url.createdAt };
   }
 
+  @Throttle({ default: { limit: 10, ttl: 60 } })
   @Get('/stats/:shortUrl')
   @ApiOperation({ summary: 'Get statistics about a shortened URL' })
   @ApiParam({ name: 'shortUrl', description: 'The shortened URL' })
