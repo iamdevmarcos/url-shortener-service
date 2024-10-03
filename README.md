@@ -98,3 +98,5 @@ You can run the test suite using Docker as well:
    ```bash
    docker-compose exec app npm run test:e2e
    ```
+
+.
